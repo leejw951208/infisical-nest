@@ -21,9 +21,9 @@ export const generateInfisicalClient = async () => {
     siteUrl: 'http://localhost:80',
     auth: {
       universalAuth: {
-        clientId: '3e18c6bd-31f2-4bbb-a088-603de1b7db99',
+        clientId: 'b7b5a3d7-ed60-4fd4-8c10-6f64e096fdfa',
         clientSecret:
-          '462bdad732e55e45ba9da8fe12be39d39a8ecb8cbb7b2a1c12f8f57da6a0dab8',
+          '0d612546dfa76de2b6780e529fdf3f124b784c4c14b60460785d326437d0c528',
       },
     },
   });
