@@ -1,5 +1,8 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { generateInfisicalClient } from './config/infisical-config';
+import { join } from 'path';
+import { writeFileSync } from 'fs';
 
 @Controller()
 export class AppController {
@@ -22,5 +25,27 @@ export class AppController {
     @Body() req: { key: string; value: string; env?: string },
   ): Promise<string> {
     return await this.appService.updateValue(req);
+  }
+
+  @Get('/download/:projectId/:env')
+  async download(
+    @Param('projectId') projectId: string,
+    @Param('env') env: string,
+  ): Promise<string> {
+    const client = await generateInfisicalClient();
+    const secrets = await client.listSecrets({
+      environment: env,
+      projectId: projectId,
+      includeImports: false,
+    });
+
+    const content = secrets
+      .map((secret) => `${secret.secretKey}=${secret.secretValue}`)
+      .join('\n');
+
+    const filePath = join(__dirname, '..', `.env.${env}`);
+    writeFileSync(filePath, content);
+
+    return filePath;
   }
 }
